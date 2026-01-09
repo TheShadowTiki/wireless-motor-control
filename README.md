@@ -24,9 +24,9 @@ Below is the hardware setup used for the project, including the ESP32, MSP430FR2
 
 The user interface is a simple web application served over WiFi. It provides a slider and input field for selecting the desired motor speed percentage. When a value is submitted, it is sent to the ESP32 as an HTTP request.
 
-<img width="320" height="694" alt="image" src="https://github.com/user-attachments/assets/752d0378-50ab-4036-ba0b-72e3ff56f2fc" />
-<img width="320" height="694" alt="image" src="https://github.com/user-attachments/assets/a70d7106-6d49-460a-b096-2617dd252eaf" />
-<img width="320" height="694" alt="image" src="https://github.com/user-attachments/assets/d735faa6-037c-4a21-88bf-7093d7a18ec1" />
+<img width="200" height="433" alt="image" src="https://github.com/user-attachments/assets/752d0378-50ab-4036-ba0b-72e3ff56f2fc" />
+<img width="200" height="433" alt="image" src="https://github.com/user-attachments/assets/a70d7106-6d49-460a-b096-2617dd252eaf" />
+<img width="200" height="433" alt="image" src="https://github.com/user-attachments/assets/d735faa6-037c-4a21-88bf-7093d7a18ec1" />
 
 The ESP32 parses the request and sends the motor speed value to the MSP430 over UART.
 

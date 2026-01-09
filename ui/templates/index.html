@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor Speed Controller</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function setSliderBackground(slider) {
+            var value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+            slider.style.setProperty('--value', value + '%');
+        }
+
+        function validateSpeed() {
+            var speedInput = document.getElementById("speed");
+            var tooltip = document.getElementById("tooltip");
+            var submitButton = document.querySelector(".submit-button");
+
+            if (!speedInput.value) {
+                tooltip.style.display = 'none';
+                submitButton.disabled = true;
+            } else if (speedInput.value < 0) {
+                tooltip.textContent = 'Value must be at least 0';
+                tooltip.style.display = 'block';
+                submitButton.disabled = true;
+            } else if (speedInput.value > 100) {
+                tooltip.textContent = 'Value must be at most 100';
+                tooltip.style.display = 'block';
+                submitButton.disabled = true;
+            } else if (speedInput.checkValidity()) {
+                tooltip.style.display = 'none';
+                submitButton.disabled = false;
+            } else {
+                tooltip.textContent = 'Speed must be between 0 and 100';
+                tooltip.style.display = 'block';
+                submitButton.disabled = true;
+            }
+        }
+
+        function sendSpeed() {
+            var speedInput = document.getElementById("speed");
+            var speed = parseInt(speedInput.value);
+            var message = document.getElementById("message");
+
+            // Clear any previous message
+            message.innerHTML = '';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/set_speed", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        message.style.color = 'green';
+                        message.innerHTML = response.message;
+                        // Format speed input to percentage
+                        speedInput.value = speed + '%';
+                    } else {
+                        message.style.color = 'red';
+                        message.innerHTML = 'Failed to set speed';
+                    }
+                }
+            };
+            xhr.send("speed=" + speed);
+        }
+
+        function updateSliderValue(value) {
+            var speedInput = document.getElementById('speed');
+            speedInput.value = value;
+            validateSpeed();
+            setSliderBackground(document.getElementById('slider'));
+        }
+
+        function updateInputValue(value) {
+            var slider = document.getElementById('slider');
+            slider.value = value;
+            validateSpeed();
+            setSliderBackground(slider);
+        }
+
+        window.onload = function() {
+            setSliderBackground(document.getElementById('slider'));
+        }
+    </script>
+</head>
+<body>
+    <h1>Motor Speed Controller</h1>
+    <div class="container">
+        <form onsubmit="event.preventDefault(); sendSpeed();">
+            <label for="slider">Select Speed:</label>
+            <input type="range" id="slider" class="slider" min="0" max="100" oninput="updateSliderValue(this.value)">
+            <div class="input-container">
+                <label for="speed">Speed:</label>
+                <input type="number" id="speed" name="speed" min="0" max="100" oninput="updateInputValue(this.value)" required>
+                <div id="tooltip" class="tool_tip" style="display: none;">Enter a quantity</div>
+            </div>
+            <button type="submit" class="submit-button" disabled>Submit</button>
+        </form>
+        <p id="message"></p>
+    </div>
+</body>
+</html>

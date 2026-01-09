@@ -12,8 +12,6 @@ app = Flask(__name__)
 
 # Replace with the IP address of your ESP32
 # ESP32_IP = 'http://<ESP32_IP_ADDRESS>'
-#ESP32_IP = 'http://192.168.254.11'
-ESP32_IP = 'http://172.20.10.5'
 
 @app.route('/')
 def index():
